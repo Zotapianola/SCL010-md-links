@@ -44,14 +44,4 @@ const readMD = (fileName) => {
 
 // exportar método
 
-/*
-
-1. Ingresar a función con credencial y elegir si me validan y datos trivia.
-2. Al entrar, siento que me abren.
-3. Cuando me abren, buscando mis ojos, manos y dientes.
-4. Los dientes son capturados y almacenados en cajas llamadas objetos.
-5. Las cajas deben volver
-
-*/
-
 module.exports = mdLinks;
