@@ -1,4 +1,42 @@
 {
   "name": "md-links",
-  "version": "0.1.0"
+  "version": "1.0.0",
+  "description": "App para recorrer archivos md, obtener sus links y verificarlos, entre otras cosas.",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "eslint --ext .js src/ test/",
+    "test": "jest --coverage",
+    "pretest": "npm run eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zotapianola/SCL010-md-links.git"
+  },
+  "keywords": [
+    "md",
+    "files",
+    "links",
+    "verify"
+  ],
+  "author": "Estefanía Romero-Cors, Laboratoria y el Todopodeoroso Hipnosapo",
+  "license": "ISC",
+  "bin": {
+    "md-links": "./src/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Zotapianola/SCL010-md-links/issues"
+  },
+  "homepage": "https://github.com/Zotapianola/SCL010-md-links#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
+    "babel-install": "2.1.0",
+    "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "acorn": "^7.0.0",
+    "eslint": "^6.2.2",
+    "eslint-plugin-jest": "^22.15.2",
+    "nyc": "^14.1.1"
+  }
 }
