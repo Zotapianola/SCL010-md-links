@@ -83,8 +83,7 @@ const readMD = (fileName) => {
 			// Array vacío de links
 			// let urls = [];
 			if(fileName != null){
-				resolve(console.log('Obtuvimos MD'));
-				// esto iba en resolve: resolve(console.log(contents.toString());
+				resolve(console.log(contents.toString()));
 			} else {
 				reject(error);
 			}
