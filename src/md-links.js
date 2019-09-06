@@ -1,32 +1,59 @@
 const fs = require('fs');
-const path = require('path');
+const pathImp = require('path');
 const fileHound = require('filehound');
+const marked = require('marked');
+const renderer = new marked.Renderer();
+
+let mdLinksErrors = {
+	md01: 'No es un archivo ".md" . Solicite un archivo ".md" o un directorio',
+	md02:'No hay archivos *.md en esta carpeta',
+	path01: 'Path y options vacíos',
+	read01: 'No se puede leer el archivo',
+	dir01: 'Error inesperado al leer carpeta'
+}
 
 // función mdLinks
 const mdLinks = (path, options) => {
 
-	let paths = [];
-
+	// protocolo si es carpeta
 	if (fs.lstatSync(path).isDirectory())
 	{
-		console.log("Es un directorio");
-		paths = findMDFiles(path);
-		console.log(typeof paths);
-		// console.log(paths);
-
-	}
-	else if (fs.lstatSync(path).isFile())
-	{
-		console.log("Es un archivo");
-		return new Promise((resolve, reject) => {
-			console.log("Resolviendo la promesa...");
-			resolve(readMD(path));
-			reject(new Error("Path y options vacíos"));
+		return new Promise((resolve, reject)=> {
+			console.log('Resolviendo la promesa...');
+			resolve(findMDFiles(path));
+			reject(new Error(mdLinksErrors.dir01));
 		}).then(
 			(fulfilled) => {console.log(options)
 		}).catch(
-			(error) => {console.log("Error en leer texto")}
+			(error) => {console.log(mdLinksErrors.dir01)}
 		)
+
+	}
+	// protocolo si es archivo
+	else if (fs.lstatSync(path).isFile())
+	{
+		if ((pathImp.extname(path)) != '.md')
+		{
+			console.log(mdLinksErrors.md01);
+		}
+		else {
+			console.log('Es un archivo .md');
+			return new Promise((resolve, reject) => {
+				console.log('Resolviendo la promesa...');
+				resolve(readMD(path).then(
+						// después de leer, usar renderer para obtener links
+						renderer.link = (href, title, text) => {
+							console.log(href, title, text);
+						}
+					)
+				);
+				reject(new Error(mdLinksErrors.path01));
+			}).then(
+				(fulfilled) => {console.log(options)
+			}).catch(
+				(error) => {console.log(mdLinksErrors.read01)}
+			)
+		}
 	}
 };
 
@@ -36,11 +63,11 @@ const findMDFiles = (path) => {
 		.paths(path)
 		.ext('md')
 		.find((err,files)=> {
-			if (files.length === 0)
+			if (files.length == 0)
 			{
-				reject(new Error("No hay archivos *.md en esta carpeta"));
+				reject(new Error(mdLinksErrors.md02));
 			}
-		}).then(
+			}).then(
 			files => {
 				resolve(files);
 			}
@@ -56,8 +83,8 @@ const readMD = (fileName) => {
 			// Array vacío de links
 			// let urls = [];
 			if(fileName != null){
-				resolve(console.log("Obtuvimos MD"));
-				// esto iba en resolve: console.log(contents.toString())
+				resolve(console.log('Obtuvimos MD'));
+				// esto iba en resolve: resolve(console.log(contents.toString());
 			} else {
 				reject(error);
 			}
@@ -66,10 +93,6 @@ const readMD = (fileName) => {
 }
 
 // función para validar links
-
-// función que chequee si es archivo o carpeta
-
-// función que con path.extname chequee extensión
 
 // función que revise carpetas con fs.readdir(path[, options], callback)
 
